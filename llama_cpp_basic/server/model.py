@@ -4,11 +4,11 @@ import json
 
 from typing import Dict, Optional, Union, List
 
-import llama_cpp
-import llama_cpp.llama_speculative as llama_speculative
-import llama_cpp.llama_tokenizer as llama_tokenizer
+import llama_cpp_basic as llama_cpp
+from . import llama_speculative as llama_speculative
+from . import llama_tokenizer as llama_tokenizer
 
-from llama_cpp.server.settings import ModelSettings
+from .server.settings import ModelSettings
 
 
 class LlamaProxy:

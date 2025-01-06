@@ -16,7 +16,7 @@ from fastapi import (
 from fastapi.responses import JSONResponse
 from fastapi.routing import APIRoute
 
-from llama_cpp.server.types import (
+from .server.types import (
     CreateCompletionRequest,
     CreateEmbeddingRequest,
     CreateChatCompletionRequest,

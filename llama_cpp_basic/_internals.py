@@ -20,7 +20,7 @@ from .llama_types import *
 from .llama_grammar import LlamaGrammar
 from ._utils import suppress_stdout_stderr
 
-import llama_cpp.llama_cpp as llama_cpp
+from . import llama_cpp as llama_cpp
 
 
 # Python wrappers over llama.h structs
@@ -699,7 +699,7 @@ class LlamaSamplingContext:
 
 from typing import List, Callable, Optional, Union
 import ctypes
-import llama_cpp
+import llama_cpp_basic as llama_cpp
 
 
 class CustomSampler:

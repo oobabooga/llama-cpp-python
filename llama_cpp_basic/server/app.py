@@ -9,7 +9,7 @@ from anyio import Lock
 from functools import partial
 from typing import Iterator, List, Optional, Union, Dict
 
-import llama_cpp
+import llama_cpp_basic as llama_cpp
 
 import anyio
 from anyio.streams.memory import MemoryObjectSendStream
@@ -22,16 +22,16 @@ from sse_starlette.sse import EventSourceResponse
 from starlette_context.plugins import RequestIdPlugin  # type: ignore
 from starlette_context.middleware import RawContextMiddleware
 
-from llama_cpp.server.model import (
+from .server.model import (
     LlamaProxy,
 )
-from llama_cpp.server.settings import (
+from .server.settings import (
     ConfigFileSettings,
     Settings,
     ModelSettings,
     ServerSettings,
 )
-from llama_cpp.server.types import (
+from .server.types import (
     CreateCompletionRequest,
     CreateEmbeddingRequest,
     CreateChatCompletionRequest,
@@ -42,7 +42,7 @@ from llama_cpp.server.types import (
     DetokenizeInputRequest,
     DetokenizeInputResponse,
 )
-from llama_cpp.server.errors import RouteErrorHandler
+from .server.errors import RouteErrorHandler
 
 
 router = APIRouter(route_class=RouteErrorHandler)
