@@ -3,7 +3,7 @@ requires = ["scikit-build-core[pyproject]>=0.9.2"]
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "llama_cpp_python"
+name = "llama_cpp_python_basic"
 dynamic = ["version"]
 description = "Python bindings for the llama.cpp library"
 readme = "README.md"
