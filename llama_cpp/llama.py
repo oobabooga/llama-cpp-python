@@ -28,6 +28,7 @@ from typing import (
 )
 from collections import deque
 from pathlib import Path
+from tqdm import tqdm
 
 
 from .llama_types import *
@@ -633,7 +634,13 @@ class Llama:
             tokens: The list of tokens to evaluate.
         """
         self._ctx.kv_cache_seq_rm(-1, self.n_tokens, -1)
-        for i in range(0, len(tokens), self.n_batch):
+
+        if len(tokens) > self.n_batch:
+            progress_bar = tqdm(range(0, len(tokens), self.n_batch), desc="Prompt evaluation", leave=False)
+        else:
+            progress_bar = range(0, len(tokens), self.n_batch)
+
+        for i in progress_bar:
             batch = tokens[i : min(len(tokens), i + self.n_batch)]
             n_past = self.n_tokens
             n_tokens = len(batch)
@@ -651,15 +658,16 @@ class Llama:
                     self._ctx.get_logits(), shape=(rows * cols,)
                 )
                 self.scores[n_past : n_past + n_tokens, :].reshape(-1)[::] = logits
+                self.last_updated_index = n_past + n_tokens - 1
             else:
-                # rows = 1
-                # cols = self._n_vocab
-                # logits = np.ctypeslib.as_array(
-                #     self._ctx.get_logits(), shape=(rows * cols,)
-                # )
-                # self.scores[n_past + n_tokens - 1, :].reshape(-1)[::] = logits
-                # NOTE: Now that sampling is done inside the sampler, logits are only needed for logprobs which requires logits_all
-                pass
+                rows = 1
+                cols = self._n_vocab
+                logits = np.ctypeslib.as_array(
+                    self._ctx.get_logits(), shape=(rows * cols,)
+                )
+                last_token_index = min(n_past + n_tokens - 1, self.scores.shape[0] - 1)
+                self.scores[last_token_index, :] = logits.reshape(-1)
+                self.last_updated_index = last_token_index
             # Update n_tokens
             self.n_tokens += n_tokens
 
