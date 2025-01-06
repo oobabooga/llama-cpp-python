@@ -13,12 +13,12 @@ Quirks:
 
 import ctypes
 import sys
-from os import cpu_count, path
 from time import time
+from os import cpu_count, path
 
 import llama_cpp
-import util
 from common import GptParams, gpt_params_parse, gpt_random_prompt
+import util
 
 
 # A LLaMA interactive session

@@ -1,6 +1,5 @@
-import json
-
 import llama_cpp
+import json
 
 tree = """
 leaf ::= "."

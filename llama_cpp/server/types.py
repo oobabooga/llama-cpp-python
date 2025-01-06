@@ -1,10 +1,12 @@
 from __future__ import annotations
 
-from typing import Dict, List, Optional, Union
+from typing import List, Optional, Union, Dict
+from typing_extensions import TypedDict, Literal
+
+from pydantic import BaseModel, Field
 
 import llama_cpp
-from pydantic import BaseModel, Field
-from typing_extensions import Literal, TypedDict
+
 
 model_field = Field(
     description="The model to use for generating completions.", default=None

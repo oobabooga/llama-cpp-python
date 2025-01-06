@@ -1,12 +1,16 @@
 import ctypes
 import multiprocessing
 
+import numpy as np
+from scipy.special import log_softmax
+
+from huggingface_hub import hf_hub_download
+
+import pytest
+
 import llama_cpp
 import llama_cpp._internals as internals
-import numpy as np
-import pytest
-from huggingface_hub import hf_hub_download
-from scipy.special import log_softmax
+
 
 MODEL = "./vendor/llama.cpp/models/ggml-vocab-llama-spm.gguf"
 

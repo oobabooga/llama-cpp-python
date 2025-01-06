@@ -1,28 +1,36 @@
 from __future__ import annotations
 
 import os
-import pathlib
-from ctypes import _Pointer  # type: ignore
 from ctypes import (
-    POINTER,
-    Structure,
     c_bool,
     c_char_p,
-    c_float,
     c_int,
     c_uint8,
-    c_void_p
+    c_float,
+    c_void_p,
+    POINTER,
+    _Pointer,  # type: ignore
+    Structure,
 )
-from typing import TYPE_CHECKING, NewType, Optional, Union
+import pathlib
+from typing import (
+    Union,
+    NewType,
+    Optional,
+    TYPE_CHECKING,
+)
 
 import llama_cpp.llama_cpp as llama_cpp
+
 from llama_cpp._ctypes_extensions import (
+    load_shared_library,
     ctypes_function_for_shared_library,
-    load_shared_library
 )
 
 if TYPE_CHECKING:
-    from llama_cpp._ctypes_extensions import CtypesArray
+    from llama_cpp._ctypes_extensions import (
+        CtypesArray,
+    )
 
 
 # Specify the base name of the shared library to load
@@ -147,3 +155,4 @@ def clip_model_load(
 @ctypes_function("clip_free", [clip_ctx_p_ctypes], None)
 def clip_free(ctx: clip_ctx_p, /):
     ...
+

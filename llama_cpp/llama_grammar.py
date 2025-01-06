@@ -1,9 +1,17 @@
 """Python implementation of llama grammar parser directly translated from C++ source file in vendor/llama.cpp/common/grammar-parser.cpp."""
 
 # flake8: noqa
-from itertools import groupby
 from pathlib import Path
-from typing import Any, List, Optional, Set, Tuple, Union
+
+from itertools import groupby
+from typing import (
+    Any,
+    Set,
+    List,
+    Optional,
+    Tuple,
+    Union,
+)
 
 LLAMA_GRAMMAR_DEFAULT_ROOT = "root"
 
@@ -328,9 +336,9 @@ PRIMITIVE_RULES = {
         '"[" space ( value ("," space value)* )? "]" space', ["value"]
     ),
     "uuid": BuiltinRule(
-        r'"\"" ' +
-        ' "-" '.join("[0-9a-fA-F]" * n for n in [8, 4, 4, 4, 12]) +
-        r' "\"" space',
+        r'"\"" '
+        + ' "-" '.join("[0-9a-fA-F]" * n for n in [8, 4, 4, 4, 12])
+        + r' "\"" space',
         [],
     ),
     "char": BuiltinRule(
@@ -420,8 +428,8 @@ class SchemaConverter:
         else:
             i = 0
             while (
-                f"{esc_name}{i}" in self._rules and
-                self._rules[f"{esc_name}{i}"] != rule
+                f"{esc_name}{i}" in self._rules
+                and self._rules[f"{esc_name}{i}"] != rule
             ):
                 i += 1
             key = f"{esc_name}{i}"
@@ -573,7 +581,7 @@ class SchemaConverter:
                     i += 1
                     while i < length and pattern[i] != "]":
                         if pattern[i] == "\\":
-                            square_brackets += pattern[i: i + 2]
+                            square_brackets += pattern[i : i + 2]
                             i += 2
                         else:
                             square_brackets += pattern[i]
@@ -645,16 +653,16 @@ class SchemaConverter:
                                 literal += pattern[i]
                                 i += 1
                             else:
-                                literal += pattern[i: i + 2]
+                                literal += pattern[i : i + 2]
                                 i += 2
                         elif pattern[i] == '"' and not self._raw_pattern:
                             literal += '\\"'
                             i += 1
                         elif pattern[i] not in NON_LITERAL_SET and (
-                            i == length - 1 or
-                            literal == "" or
-                            pattern[i + 1] == "." or
-                            pattern[i + 1] not in NON_LITERAL_SET
+                            i == length - 1
+                            or literal == ""
+                            or pattern[i + 1] == "."
+                            or pattern[i + 1] not in NON_LITERAL_SET
                         ):
                             literal += pattern[i]
                             i += 1
@@ -716,10 +724,10 @@ class SchemaConverter:
             return self._add_rule(rule_name, rule)
 
         elif schema_type in (None, "object") and (
-            "properties" in schema or
-            (
-                "additionalProperties" in schema and
-                schema["additionalProperties"] is not True
+            "properties" in schema
+            or (
+                "additionalProperties" in schema
+                and schema["additionalProperties"] is not True
             )
         ):
             required = set(schema.get("required", []))
@@ -767,12 +775,12 @@ class SchemaConverter:
             if isinstance(items, list):
                 return self._add_rule(
                     rule_name,
-                    '"[" space ' +
-                    ' "," space '.join(
+                    '"[" space '
+                    + ' "," space '.join(
                         self.visit(item, f'{name}{"-" if name else ""}tuple-{i}')
                         for i, item in enumerate(items)
-                    ) +
-                    ' "]" space',
+                    )
+                    + ' "]" space',
                 )
             else:
                 item_rule_name = self.visit(items, f'{name}{"-" if name else ""}item')
@@ -780,11 +788,11 @@ class SchemaConverter:
                 max_items = schema.get("maxItems")
                 return self._add_rule(
                     rule_name,
-                    '"[" space ' +
-                    _build_repetition(
+                    '"[" space '
+                    + _build_repetition(
                         item_rule_name, min_items, max_items, separator_rule='"," space'
-                    ) +
-                    ' "]" space',
+                    )
+                    + ' "]" space',
                 )
 
         elif schema_type in (None, "string") and "pattern" in schema:
@@ -799,8 +807,8 @@ class SchemaConverter:
             )
 
         elif (
-            schema_type in (None, "string") and
-            f"{schema_format}-string" in STRING_FORMAT_RULES
+            schema_type in (None, "string")
+            and f"{schema_format}-string" in STRING_FORMAT_RULES
         ):
             prim_name = f"{schema_format}-string"
             return self._add_rule(
@@ -817,9 +825,9 @@ class SchemaConverter:
 
             return self._add_rule(
                 rule_name,
-                r'"\"" ' +
-                _build_repetition(char_rule, min_len, max_len) +
-                r' "\"" space',
+                r'"\"" '
+                + _build_repetition(char_rule, min_len, max_len)
+                + r' "\"" space',
             )
 
         elif (schema_type == "object") or (len(schema) == 0):
@@ -882,8 +890,8 @@ class SchemaConverter:
             )
             prop_kv_rule_names["*"] = self._add_rule(
                 f"{sub_name}-kv",
-                self._add_primitive("string", PRIMITIVE_RULES["string"]) +
-                f' ":" space {value_rule}',
+                self._add_primitive("string", PRIMITIVE_RULES["string"])
+                + f' ":" space {value_rule}',
             )
             optional_props.append("*")
 

@@ -1,7 +1,11 @@
 import sys
 from abc import ABC, abstractmethod
+from typing import (
+    Optional,
+    Sequence,
+    Tuple,
+)
 from collections import OrderedDict
-from typing import Optional, Sequence, Tuple
 
 import diskcache
 

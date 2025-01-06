@@ -1,5 +1,6 @@
 import os
 import sys
+
 from typing import Any, Dict
 
 # Avoid "LookupError: unknown encoding: ascii" when open() called in a destructor

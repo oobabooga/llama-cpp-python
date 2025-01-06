@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import os
+import sys
+import json
 import ctypes
 import dataclasses
-import json
-import os
 import random
 import string
-import sys
+
 from contextlib import ExitStack
 from typing import (
     Any,
@@ -15,23 +16,24 @@ from typing import (
     List,
     Literal,
     Optional,
-    Protocol,
     Tuple,
     Union,
-    cast
+    Protocol,
+    cast,
 )
 
 import jinja2
-import numpy as np
-import numpy.typing as npt
 from jinja2.sandbox import ImmutableSandboxedEnvironment
 
+import numpy as np
+import numpy.typing as npt
+
 import llama_cpp.llama as llama
-import llama_cpp.llama_grammar as llama_grammar
 import llama_cpp.llama_types as llama_types
+import llama_cpp.llama_grammar as llama_grammar
 
 from ._logger import logger
-from ._utils import Singleton, suppress_stdout_stderr
+from ._utils import suppress_stdout_stderr, Singleton
 
 ### Common Chat Templates and Special Tokens ###
 
@@ -281,7 +283,6 @@ def _convert_text_completion_logprobs_to_chat(
         ],
         "refusal": None,
     }
-
 
 def _convert_text_completion_to_chat(
     completion: llama_types.Completion,
@@ -637,9 +638,9 @@ def chat_formatter_to_chat_completion_handler(
 
         tool = None
         if (
-            tool_choice is not None and
-            isinstance(tool_choice, dict) and
-            tools is not None
+            tool_choice is not None
+            and isinstance(tool_choice, dict)
+            and tools is not None
         ):
             name = tool_choice["function"]["name"]
             tool = next((t for t in tools if t["function"]["name"] == name), None)
@@ -791,8 +792,8 @@ def guess_chat_format_from_gguf_metadata(metadata: Dict[str, str]) -> Optional[s
         return "chatml"
 
     if (
-        metadata["tokenizer.chat_template"] == MISTRAL_INSTRUCT_CHAT_TEMPLATE or
-        metadata["tokenizer.chat_template"] == MIXTRAL_INSTRUCT_CHAT_TEMPLATE
+        metadata["tokenizer.chat_template"] == MISTRAL_INSTRUCT_CHAT_TEMPLATE
+        or metadata["tokenizer.chat_template"] == MIXTRAL_INSTRUCT_CHAT_TEMPLATE
     ):
         return "mistral-instruct"
 
@@ -1299,9 +1300,9 @@ def format_mistral_instruct(
     prompt = ""
     for message in messages:
         if (
-            message["role"] == "user" and
-            message["content"] is not None and
-            isinstance(message["content"], str)
+            message["role"] == "user"
+            and message["content"] is not None
+            and isinstance(message["content"], str)
         ):
             prompt += "[INST] " + message["content"]
         elif message["role"] == "assistant" and message["content"] is not None:
@@ -1944,8 +1945,8 @@ def functionary_v1_v2_chat_handler(
             suffix = "<|from|>assistant\n<|recipient|>"
 
         return (
-            tokenizer.hf_tokenizer.apply_chat_template(all_messages, tokenize=False) +
-            suffix
+            tokenizer.hf_tokenizer.apply_chat_template(all_messages, tokenize=False)
+            + suffix
         )
 
     if tools is not None:
@@ -2331,8 +2332,8 @@ def functionary_v1_v2_chat_handler(
                             )
                     # Check whether the model wants to generate another turn
                     if (
-                        "<|from|> assistant" in completion_text or
-                        "<|from|>assistant" in completion_text
+                        "<|from|> assistant" in completion_text
+                        or "<|from|>assistant" in completion_text
                     ):
                         if completion_text.endswith("\n<|from|>assistant\n"):
                             cleaned_completion_text = completion_text[
@@ -2419,8 +2420,8 @@ def functionary_v1_v2_chat_handler(
                         [chunk["choices"][0]["text"] for chunk in completion]
                     )
                     if (
-                        "<|from|> assistant" in completion_text or
-                        "<|from|>assistant" in completion_text
+                        "<|from|> assistant" in completion_text
+                        or "<|from|>assistant" in completion_text
                     ) and tools is not None:
                         prompt += "\n<|from|>assistant\n<|recipient|>"
                         tool_index += 1
@@ -2477,21 +2478,21 @@ def functionary_v1_v2_chat_handler(
 
             # If the generation does not involve a function call
             if (
-                START_FUNCTION_CALL_TOKEN not in prompt and
-                START_FUNCTION_CALL_TOKEN not in completion_text
+                START_FUNCTION_CALL_TOKEN not in prompt
+                and START_FUNCTION_CALL_TOKEN not in completion_text
             ):
                 completion["usage"]["completion_tokens"] = completion_tokens
                 return _convert_completion_to_chat(completion, stream=stream)  # type: ignore
             # If the generation involves a function call in completion, generate the parameters
             elif (
-                START_FUNCTION_CALL_TOKEN not in prompt and
-                START_FUNCTION_CALL_TOKEN in completion_text
+                START_FUNCTION_CALL_TOKEN not in prompt
+                and START_FUNCTION_CALL_TOKEN in completion_text
             ):
                 prompt += (
                     completion_text.replace(
                         f"{START_FUNCTION_CALL_TOKEN} ", START_FUNCTION_CALL_TOKEN
-                    ) +
-                    "\n"
+                    )
+                    + "\n"
                 )
                 function_calls.append(
                     completion_text.split(START_FUNCTION_CALL_TOKEN)[-1][:-1].strip()
@@ -2555,8 +2556,8 @@ def functionary_v1_v2_chat_handler(
                         content = content.lstrip()
                         # Check whether the model wants to generate another turn
                         if (
-                            "<|from|> assistant" in completion_text or
-                            "<|from|>assistant" in completion_text
+                            "<|from|> assistant" in completion_text
+                            or "<|from|>assistant" in completion_text
                         ):
                             if completion_text.endswith("\n<|from|>assistant\n"):
                                 cleaned_completion_text = completion_text[
@@ -2581,8 +2582,8 @@ def functionary_v1_v2_chat_handler(
                         )
                         completion_tokens += completion["usage"]["completion_tokens"]
                         if (
-                            "<|from|> assistant" in completion["choices"][0]["text"] or
-                            "<|from|>assistant" in completion["choices"][0]["text"]
+                            "<|from|> assistant" in completion["choices"][0]["text"]
+                            or "<|from|>assistant" in completion["choices"][0]["text"]
                         ):
                             prompt += "\n<|from|>assistant\n<|recipient|>"
                         else:
@@ -2595,8 +2596,8 @@ def functionary_v1_v2_chat_handler(
         for function_call, function_body in zip(function_calls, function_bodies):
             tool_calls.append(
                 {
-                    "id": "call_" +
-                    "".join(
+                    "id": "call_"
+                    + "".join(
                         [
                             random.choice(string.ascii_letters + string.digits)
                             for _ in range(24)
@@ -2731,9 +2732,9 @@ class Llava15ChatHandler:
 
     def _embed_image_bytes(self, image_bytes: bytes, n_threads_batch: int = 1):
         if (
-            self._last_image_embed is not None and
-            self._last_image_hash is not None and
-            hash(image_bytes) == self._last_image_hash
+            self._last_image_embed is not None
+            and self._last_image_hash is not None
+            and hash(image_bytes) == self._last_image_hash
         ):
             return self._last_image_embed
         with suppress_stdout_stderr(disable=self.verbose):
@@ -2819,6 +2820,7 @@ class Llava15ChatHandler:
         if self.verbose:
             print(text, file=sys.stderr)
 
+
         # Evaluate prompt
         llama.reset()
         llama._ctx.kv_cache_clear()
@@ -2849,7 +2851,7 @@ class Llava15ChatHandler:
                         n_past_p,
                     )
                 # Required to avoid issues with hf tokenizer
-                llama.input_ids[llama.n_tokens: n_past.value] = -1
+                llama.input_ids[llama.n_tokens : n_past.value] = -1
                 llama.n_tokens = n_past.value
 
         # Get prompt tokens to avoid a cache miss
@@ -2884,9 +2886,9 @@ class Llava15ChatHandler:
 
         tool = None
         if (
-            tool_choice is not None and
-            isinstance(tool_choice, dict) and
-            tools is not None
+            tool_choice is not None
+            and isinstance(tool_choice, dict)
+            and tools is not None
         ):
             name = tool_choice["function"]["name"]
             tool = next((t for t in tools if t["function"]["name"] == name), None)
@@ -2962,8 +2964,8 @@ class Llava15ChatHandler:
                     if isinstance(content, dict) and "type" in content:
                         if content["type"] == "image_url":
                             if (
-                                isinstance(content["image_url"], dict) and
-                                "url" in content["image_url"]
+                                isinstance(content["image_url"], dict)
+                                and "url" in content["image_url"]
                             ):
                                 image_urls.append(content["image_url"]["url"])
                             else:
@@ -2988,7 +2990,7 @@ class Llava15ChatHandler:
                 if pos > 0:
                     split_text.append(("text", remaining[:pos]))
                 split_text.append(("image_url", image_urls[i]))
-                remaining = remaining[pos + len(image_urls[i]):]
+                remaining = remaining[pos + len(image_urls[i]) :]
             else:
                 split_text.append(("text", remaining))
                 remaining = ""
@@ -3008,10 +3010,7 @@ class Llava15ChatHandler:
         from pathlib import Path
 
         try:
-            from huggingface_hub import (  # type: ignore
-                HfFileSystem,
-                hf_hub_download
-            )
+            from huggingface_hub import hf_hub_download, HfFileSystem  # type: ignore
             from huggingface_hub.utils import validate_repo_id  # type: ignore
         except ImportError:
             raise ImportError(
@@ -3439,7 +3438,7 @@ def chatml_function_calling(
         "{% endif %}"
         # Assistant message
         "{% if message.role == 'assistant' %}"
-        # Reglar message
+        ## Reglar message
         "{% if message.content and message.content | length > 0 %}"
         "{% if tool_calls %}"
         "message:\n"
@@ -3447,7 +3446,7 @@ def chatml_function_calling(
         "{{ message.content }}"
         "<|im_end|>\n"
         "{% endif %}"
-        # Function calls
+        ## Function calls
         "{% if 'tool_calls' in message %}"
         "{% for tool_call in message.tool_calls %}"
         "functions.{{ tool_call.function.name }}:\n"
@@ -3496,10 +3495,10 @@ def chatml_function_calling(
 
     # Case 1: No tool choice by user
     if (
-        tool_choice is None or
-        (isinstance(tool_choice, str) and tool_choice == "none") or
-        tools is None or
-        len(tools) == 0
+        tool_choice is None
+        or (isinstance(tool_choice, str) and tool_choice == "none")
+        or tools is None
+        or len(tools) == 0
     ):
         prompt = template_renderer.render(
             messages=messages,
@@ -3664,7 +3663,7 @@ def chatml_function_calling(
         )
 
     # One or more function calls
-    tool_name = text[len("functions."):]
+    tool_name = text[len("functions.") :]
     tool = next((tool for tool in tools if tool["function"]["name"] == tool_name), None)
     if not stream:
         completions: List[llama_types.CreateCompletionResponse] = []
@@ -3738,7 +3737,7 @@ def chatml_function_calling(
             )
             response = cast(llama_types.CreateCompletionResponse, response)
 
-            tool_name = response["choices"][0]["text"][len("functions."):]
+            tool_name = response["choices"][0]["text"][len("functions.") :]
             tool = next(
                 (tool for tool in tools if tool["function"]["name"] == tool_name), None
             )
@@ -3775,11 +3774,11 @@ def chatml_function_calling(
                         "content": None,
                         "tool_calls": [
                             {
-                                "id": "call_" +
-                                f"_{i}_" +
-                                tool_name +
-                                "_" +
-                                completion["id"],
+                                "id": "call_"
+                                + f"_{i}_"
+                                + tool_name
+                                + "_"
+                                + completion["id"],
                                 "type": "function",
                                 "function": {
                                     "name": tool_name,

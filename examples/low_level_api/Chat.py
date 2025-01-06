@@ -1,8 +1,5 @@
 #!/bin/python
-import datetime
-import os
-import sys
-
+import sys, os, datetime
 from common import GptParams
 from low_level_api_chat_cpp import LLaMAInteract
 

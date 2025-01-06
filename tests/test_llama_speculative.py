@@ -1,6 +1,6 @@
 import numpy as np
-from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
 
+from llama_cpp.llama_speculative import LlamaPromptLookupDecoding
 
 def test_find_candidate_pred_tokens():
     find_candidate_pred_tokens = LlamaPromptLookupDecoding.find_candidate_pred_tokens

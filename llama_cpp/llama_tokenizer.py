@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 import abc
-from typing import Any, List, Optional
+from typing import (
+    List,
+    Optional,
+    Any,
+)
 
 import llama_cpp
 from llama_cpp.llama_types import List
@@ -95,7 +99,7 @@ class LlamaHFTokenizer(BaseLlamaTokenizer):
             prev_text = self.hf_tokenizer.decode(
                 prev_tokens, skip_special_tokens=skip_special_tokens
             ).encode("utf-8", errors="ignore")
-            return text[len(prev_text):]
+            return text[len(prev_text) :]
         else:
             return self.hf_tokenizer.decode(
                 tokens, skip_special_tokens=skip_special_tokens

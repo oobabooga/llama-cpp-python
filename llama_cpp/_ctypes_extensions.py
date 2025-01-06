@@ -1,21 +1,21 @@
 from __future__ import annotations
 
+import sys
+import os
 import ctypes
 import functools
-import os
 import pathlib
-import sys
+
 from typing import (
-    TYPE_CHECKING,
     Any,
     Callable,
-    Generic,
     List,
+    Union,
     Optional,
+    TYPE_CHECKING,
     TypeVar,
-    Union
+    Generic,
 )
-
 from typing_extensions import TypeAlias
 
 
