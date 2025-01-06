@@ -1,27 +1,19 @@
 from __future__ import annotations
 
-import os
 import ctypes
-
-from typing import (
-    Dict,
-    List,
-    Tuple,
-    Optional,
-    Sequence,
-)
-from dataclasses import dataclass, field
+import os
 from contextlib import ExitStack
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
 import numpy.typing as npt
 
-from .llama_types import *
-from .llama_grammar import LlamaGrammar
-from ._utils import suppress_stdout_stderr
-
 import llama_cpp.llama_cpp as llama_cpp
 
+from ._utils import suppress_stdout_stderr
+from .llama_grammar import LlamaGrammar
+from .llama_types import *
 
 # Python wrappers over llama.h structs
 
@@ -631,7 +623,7 @@ class LlamaSamplingContext:
         if len(self.prev) > 0:
             nl_token = ctx_main.model.token_nl()
             nl_logit = logits_array[nl_token]
-            last_tokens = self.prev[-self.params.penalty_last_n :]
+            last_tokens = self.prev[-self.params.penalty_last_n:]
             last_tokens_size = min(len(last_tokens), self.params.penalty_last_n)
             if last_tokens_size > 0:
                 last_tokens_p = (llama_cpp.llama_token * len(last_tokens))(*last_tokens)
@@ -697,8 +689,9 @@ class LlamaSamplingContext:
         self.prev.append(id)
 
 
-from typing import List, Callable, Optional, Union
 import ctypes
+from typing import Callable, List, Optional, Union
+
 import llama_cpp
 
 

@@ -1,32 +1,25 @@
 from __future__ import annotations
 
-import os
 import ctypes
+import os
 import pathlib
-
-from typing import (
-    Callable,
-    Union,
-    NewType,
-    Optional,
-    TYPE_CHECKING,
-)
+from typing import TYPE_CHECKING, Callable, NewType, Optional, Union
 
 from llama_cpp._ctypes_extensions import (
-    load_shared_library,
     byref,
     ctypes_function_for_shared_library,
+    load_shared_library
 )
 
 if TYPE_CHECKING:
     from llama_cpp._ctypes_extensions import (
-        CtypesCData,
         CtypesArray,
-        CtypesPointer,
-        CtypesVoidPointer,
-        CtypesRef,
-        CtypesPointerOrRef,
+        CtypesCData,
         CtypesFuncPointer,
+        CtypesPointer,
+        CtypesPointerOrRef,
+        CtypesRef,
+        CtypesVoidPointer
     )
 
 
@@ -691,7 +684,7 @@ class llama_model_params(ctypes.Structure):
         check_tensors: bool
 
     _fields_ = [
-        ("devices", ctypes.c_void_p), # NOTE: unnused
+        ("devices", ctypes.c_void_p),  # NOTE: unnused
         ("n_gpu_layers", ctypes.c_int32),
         ("split_mode", ctypes.c_int),
         ("main_gpu", ctypes.c_int32),
@@ -2685,26 +2678,36 @@ def llama_token_fim_pre(model: llama_model_p, /) -> int:
     ...
 
 # LLAMA_API llama_token llama_token_fim_suf(const struct llama_model * model);
+
+
 @ctypes_function("llama_token_fim_suf", [llama_model_p_ctypes], llama_token)
 def llama_token_fim_suf(model: llama_model_p, /) -> int:
     ...
 
 # LLAMA_API llama_token llama_token_fim_mid(const struct llama_model * model);
+
+
 @ctypes_function("llama_token_fim_mid", [llama_model_p_ctypes], llama_token)
 def llama_token_fim_mid(model: llama_model_p, /) -> int:
     ...
 
 # LLAMA_API llama_token llama_token_fim_pad(const struct llama_model * model);
+
+
 @ctypes_function("llama_token_fim_pad", [llama_model_p_ctypes], llama_token)
 def llama_token_fim_pad(model: llama_model_p, /) -> int:
     ...
 
 # LLAMA_API llama_token llama_token_fim_rep(const struct llama_model * model);
+
+
 @ctypes_function("llama_token_fim_rep", [llama_model_p_ctypes], llama_token)
 def llama_token_fim_rep(model: llama_model_p, /) -> int:
     ...
 
 # LLAMA_API llama_token llama_token_fim_sep(const struct llama_model * model);
+
+
 @ctypes_function("llama_token_fim_sep", [llama_model_p_ctypes], llama_token)
 def llama_token_fim_sep(model: llama_model_p, /) -> int:
     ...
@@ -3637,5 +3640,3 @@ def llama_perf_sampler_print(chain: llama_sampler_p, /):
 )
 def llama_perf_sampler_reset(chain: llama_sampler_p, /):
     ...
-
-

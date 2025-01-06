@@ -26,8 +26,8 @@ To actually see the implementation of the server, see llama_cpp/server/app.py
 """
 
 import os
-import uvicorn
 
+import uvicorn
 from llama_cpp.server.app import create_app
 
 if __name__ == "__main__":

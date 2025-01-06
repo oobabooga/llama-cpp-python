@@ -1,26 +1,20 @@
 from __future__ import annotations
 
 import sys
-import traceback
 import time
-from re import compile, Match, Pattern
-from typing import Callable, Coroutine, Optional, Tuple, Union, Dict
-from typing_extensions import TypedDict
+import traceback
+from re import Match, Pattern, compile
+from typing import Callable, Coroutine, Dict, Optional, Tuple, Union
 
-
-from fastapi import (
-    Request,
-    Response,
-    HTTPException,
-)
+from fastapi import HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from fastapi.routing import APIRoute
-
 from llama_cpp.server.types import (
-    CreateCompletionRequest,
-    CreateEmbeddingRequest,
     CreateChatCompletionRequest,
+    CreateCompletionRequest,
+    CreateEmbeddingRequest
 )
+from typing_extensions import TypedDict
 
 
 class ErrorResponse(TypedDict):

@@ -1,9 +1,8 @@
 import argparse
-
-from llama_cpp import Llama
+from typing import Any, List, Mapping, Optional
 
 from langchain.llms.base import LLM
-from typing import Optional, List, Mapping, Any
+from llama_cpp import Llama
 
 
 class LlamaLLM(LLM):
@@ -41,9 +40,9 @@ answer = llm(
 )
 print(f"Answer: {answer.strip()}")
 
+from langchain.chains import LLMChain
 # Using in a chain
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
 
 prompt = PromptTemplate(
     input_variables=["product"],

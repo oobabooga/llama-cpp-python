@@ -1,8 +1,10 @@
-from starlette.requests import Request
 from typing import Dict
+
+from llama_cpp import Llama
+from starlette.requests import Request
+
 from ray import serve
 from ray.serve import Application
-from llama_cpp import Llama
 
 
 @serve.deployment

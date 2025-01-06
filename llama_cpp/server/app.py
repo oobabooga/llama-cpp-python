@@ -1,49 +1,51 @@
 from __future__ import annotations
 
-import os
-import json
-import typing
 import contextlib
-
-from anyio import Lock
+import json
+import os
+import typing
 from functools import partial
-from typing import Iterator, List, Optional, Union, Dict
-
-import llama_cpp
+from typing import Dict, Iterator, List, Optional, Union
 
 import anyio
+import llama_cpp
+from anyio import Lock
 from anyio.streams.memory import MemoryObjectSendStream
-from starlette.concurrency import run_in_threadpool, iterate_in_threadpool
-from fastapi import Depends, FastAPI, APIRouter, Request, HTTPException, status, Body
+from fastapi import (
+    APIRouter,
+    Body,
+    Depends,
+    FastAPI,
+    HTTPException,
+    Request,
+    status
+)
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer
-from sse_starlette.sse import EventSourceResponse
-from starlette_context.plugins import RequestIdPlugin  # type: ignore
-from starlette_context.middleware import RawContextMiddleware
-
-from llama_cpp.server.model import (
-    LlamaProxy,
-)
+from llama_cpp.server.errors import RouteErrorHandler
+from llama_cpp.server.model import LlamaProxy
 from llama_cpp.server.settings import (
     ConfigFileSettings,
-    Settings,
     ModelSettings,
     ServerSettings,
+    Settings
 )
 from llama_cpp.server.types import (
+    CreateChatCompletionRequest,
     CreateCompletionRequest,
     CreateEmbeddingRequest,
-    CreateChatCompletionRequest,
-    ModelList,
-    TokenizeInputRequest,
-    TokenizeInputResponse,
-    TokenizeInputCountResponse,
     DetokenizeInputRequest,
     DetokenizeInputResponse,
+    ModelList,
+    TokenizeInputCountResponse,
+    TokenizeInputRequest,
+    TokenizeInputResponse
 )
-from llama_cpp.server.errors import RouteErrorHandler
-
+from sse_starlette.sse import EventSourceResponse
+from starlette.concurrency import iterate_in_threadpool, run_in_threadpool
+from starlette_context.middleware import RawContextMiddleware
+from starlette_context.plugins import RequestIdPlugin  # type: ignore
 
 router = APIRouter(route_class=RouteErrorHandler)
 

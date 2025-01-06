@@ -1,5 +1,7 @@
 #!/bin/python
-import sys, os
+import os
+import sys
+
 from common import GptParams
 from low_level_api_chat_cpp import LLaMAInteract
 

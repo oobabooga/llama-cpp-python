@@ -1,14 +1,11 @@
 import json
 
 import jinja2
-
-from llama_cpp import (
-    ChatCompletionRequestUserMessage,
-)
-import llama_cpp.llama_types as llama_types
 import llama_cpp.llama_chat_format as llama_chat_format
-
+import llama_cpp.llama_types as llama_types
+from llama_cpp import ChatCompletionRequestUserMessage
 from llama_cpp.llama_chat_format import hf_tokenizer_config_to_chat_formatter
+
 
 def test_mistral_instruct():
     chat_template = "{{ bos_token }}{% for message in messages %}{% if (message['role'] == 'user') != (loop.index0 % 2 == 0) %}{{ raise_exception('Conversation roles must alternate user/assistant/user/assistant/...') }}{% endif %}{% if message['role'] == 'user' %}{{ '[INST] ' + message['content'] + ' [/INST]' }}{% elif message['role'] == 'assistant' %}{{ message['content'] + eos_token}}{% else %}{{ raise_exception('Only user and assistant roles are supported!') }}{% endif %}{% endfor %}"
