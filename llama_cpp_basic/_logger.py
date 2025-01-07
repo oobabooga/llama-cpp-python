@@ -2,7 +2,7 @@ import sys
 import ctypes
 import logging
 
-import llama_cpp_basic as llama_cpp
+import llama_cpp
 
 # enum ggml_log_level {
 #     GGML_LOG_LEVEL_NONE  = 0,

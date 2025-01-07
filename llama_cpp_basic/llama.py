@@ -40,15 +40,15 @@ from .llama_cache import (
     LlamaRAMCache,  # type: ignore
 )
 from .llama_tokenizer import BaseLlamaTokenizer, LlamaTokenizer
-from . import llama_cpp as llama_cpp
-from . import llama_chat_format as llama_chat_format
+import llama_cpp.llama_cpp as llama_cpp
+import llama_cpp.llama_chat_format as llama_chat_format
 
-from .llama_speculative import LlamaDraftModel
+from llama_cpp.llama_speculative import LlamaDraftModel
 
 import numpy as np
 import numpy.typing as npt
 
-from . import _internals as internals
+import llama_cpp._internals as internals
 from ._logger import set_verbose
 from ._utils import suppress_stdout_stderr
 

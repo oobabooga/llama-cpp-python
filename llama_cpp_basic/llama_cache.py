@@ -9,7 +9,7 @@ from collections import OrderedDict
 
 import diskcache
 
-from . import llama
+import llama_cpp.llama
 
 from .llama_types import *
 

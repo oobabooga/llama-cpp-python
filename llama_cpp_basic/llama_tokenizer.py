@@ -7,8 +7,8 @@ from typing import (
     Any,
 )
 
-import llama_cpp_basic as llama_cpp
-from .llama_types import List
+import llama_cpp
+from llama_cpp.llama_types import List
 
 
 class BaseLlamaTokenizer(abc.ABC):

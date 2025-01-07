@@ -12,7 +12,7 @@ from typing import (
     TYPE_CHECKING,
 )
 
-from ._ctypes_extensions import (
+from llama_cpp._ctypes_extensions import (
     load_shared_library,
     byref,
     ctypes_function_for_shared_library,

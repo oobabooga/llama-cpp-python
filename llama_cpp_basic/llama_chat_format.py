@@ -28,9 +28,9 @@ from jinja2.sandbox import ImmutableSandboxedEnvironment
 import numpy as np
 import numpy.typing as npt
 
-from . import llama as llama
-from . import llama_types as llama_types
-from . import llama_grammar as llama_grammar
+import llama_cpp.llama as llama
+import llama_cpp.llama_types as llama_types
+import llama_cpp.llama_grammar as llama_grammar
 
 from ._logger import logger
 from ._utils import suppress_stdout_stderr, Singleton

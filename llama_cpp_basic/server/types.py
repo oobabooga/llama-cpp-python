@@ -5,7 +5,7 @@ from typing_extensions import TypedDict, Literal
 
 from pydantic import BaseModel, Field
 
-import llama_cpp_basic as llama_cpp
+import llama_cpp
 
 
 model_field = Field(

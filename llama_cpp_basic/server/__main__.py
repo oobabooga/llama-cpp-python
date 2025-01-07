@@ -30,14 +30,14 @@ import argparse
 
 import uvicorn
 
-from .server.app import create_app
-from .server.settings import (
+from llama_cpp.server.app import create_app
+from llama_cpp.server.settings import (
     Settings,
     ServerSettings,
     ModelSettings,
     ConfigFileSettings,
 )
-from .server.cli import add_args_from_model, parse_model_from_args
+from llama_cpp.server.cli import add_args_from_model, parse_model_from_args
 
 
 def main():
