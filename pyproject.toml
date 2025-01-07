@@ -61,7 +61,7 @@ all = [
 ]
 
 [tool.scikit-build]
-wheel.packages = ["llama_cpp_basic"]
+wheel.packages = ["llama_cpp"]
 cmake.verbose = true
 cmake.minimum-version = "3.21"
 minimum-version = "0.5.1"
@@ -69,7 +69,7 @@ sdist.include = [".git", "vendor/llama.cpp/*"]
 
 [tool.scikit-build.metadata.version]
 provider = "scikit_build_core.metadata.regex"
-input = "llama_cpp_basic/__init__.py"
+input = "llama_cpp/__init__.py"
 
 [project.urls]
 Homepage = "https://github.com/abetlen/llama-cpp-python"
